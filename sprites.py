@@ -17,7 +17,7 @@ class Bullet(Sprite):
         self.groups = game.all_sprites
         Sprite.__init__(self, self.groups)
         self.image = pg.Surface((TILESIZE[0]/2, TILESIZE[1]/2))
-        self.image.fill((255, 0, 255))
+        self.image.fill((0, 0, 0))
         self.rect = self.image.get_rect()
         self.dir = direction
         self.vel = vec(0,0)
@@ -251,12 +251,12 @@ class Boost(Sprite):
         pass
 
 class Wall(Sprite):
-    def __init__(self, game, x, y, state, weight):
+    def __init__(self, game, x, y, state, weight, sprite):
         self.game = game
         self.groups = game.all_sprites, game.all_walls
         Sprite.__init__(self, self.groups)
         self.image = pg.Surface(TILESIZE)
-        self.image = self.game.base_wall_img
+        self.image = sprite
         self.rect = self.image.get_rect()
         # self.rect.x = x*TILESIZE[0]
         # self.rect.y = y*TILESIZE[1]
