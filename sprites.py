@@ -76,7 +76,7 @@ class Player(Sprite):
         self.groups = game.all_sprites
         Sprite.__init__(self, self.groups)
         self.image = pg.Surface((32, 32))
-        self.image = game.player_img
+        self.image = self.game.player_img
         self.rect = self.image.get_rect()
         # self.rect.x = x * TILESIZE[0]
         # self.rect.y = y * TILESIZE[1]
@@ -187,7 +187,7 @@ class Mob(Sprite):
         Sprite.__init__(self, self.groups)
         
         self.image = pg.Surface(TILESIZE)
-        self.image.fill((255, 0, 0))
+        self.image = self.game.mob_img
         self.rect = self.image.get_rect()
         #self.rect.x = x * TILESIZE[0]
         #self.rect.y = y * TILESIZE[1]

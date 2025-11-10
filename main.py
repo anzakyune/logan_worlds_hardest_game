@@ -32,11 +32,13 @@ class Game(): # creates a class with a name
     def load_data(self): # gives the game class a map property to parse the text file - level1.txt
         self.game_folder = path.dirname(__file__)
         self.img_folder = path.join(self.game_folder, 'images')
-        self.map = Map(path.join(self.game_folder, "level1.txt"))
+        self.lvl_folder = path.join(self.game_folder, 'levels')
+        self.map = Map(path.join(self.lvl_folder, "level2.txt"))
         #sprite initialization
         self.player_img = pg.image.load(path.join(self.img_folder, "player_32x32.png")).convert_alpha()
         self.player_hit_img = pg.image.load(path.join(self.img_folder, "player_hit_32x32.png")).convert_alpha()
-        # WALLS
+        self.mob_img = pg.image.load(path.join(self.img_folder, "mob_32x32.png")).convert_alpha()
+        # WALLS - brute force import
         self.base_wall = imageimport("wall_base_32.png", self.img_folder) # creates all the sprites from the folder. used to make different tiles so it looks nicer
         self.wall_b = imageimport("wall_b_32.png", self.img_folder)
         self.wall_t = imageimport("wall_t_32.png", self.img_folder)
@@ -59,6 +61,10 @@ class Game(): # creates a class with a name
         self.wall_tlc = imageimport("wall_brc_32.png", self.img_folder)
         self.wall_blc = imageimport("wall_trc_32.png", self.img_folder)
         self.wall_brc = imageimport("wall_tlc_32.png", self.img_folder)
+        self.wall_td = imageimport("wall_td_32.png", self.img_folder)
+        self.wall_rd = imageimport("wall_rd_32.png", self.img_folder)
+        self.wall_ld = imageimport("wall_ld_32.png", self.img_folder)
+        self.wall_bd = imageimport("wall_bd_32.png", self.img_folder)
 
     def new(self):
         self.load_data() # calls load data and creates maps
@@ -133,6 +139,14 @@ class Game(): # creates a class with a name
                     Wall(self, col, row, " ", 1, self.wall_tlc)
                 elif tile == ">":
                     Wall(self, col, row, " ", 1, self.wall_trc)
+                elif tile == "!":
+                    Wall(self, col, row, " ", 1, self.wall_td)
+                elif tile == "@":
+                    Wall(self, col, row, " ", 1, self.wall_bd)
+                elif tile == "#":
+                    Wall(self, col, row, " ", 1, self.wall_ld)
+                elif tile == "$":
+                    Wall(self, col, row, " ", 1, self.wall_rd)
                 
 
     def draw_text(self, surface, text, size, color, x, y): # draws text using imput, pygame method
