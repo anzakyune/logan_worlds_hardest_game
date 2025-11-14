@@ -38,6 +38,8 @@ class Game(): # creates a class with a name
         self.player_img = pg.image.load(path.join(self.img_folder, "player_32x32.png")).convert_alpha()
         self.player_hit_img = pg.image.load(path.join(self.img_folder, "player_hit_32x32.png")).convert_alpha()
         self.mob_img = pg.image.load(path.join(self.img_folder, "mob_32x32.png")).convert_alpha()
+        self.bg_img = pg.image.load(path.join(self.img_folder, "background_32x24.png")).convert_alpha()
+        self.bg_img = pg.transform.scale(self.bg_img, (WIDTH, HEIGHT))
         # WALLS - brute force import
         self.base_wall = imageimport("wall_base_32.png", self.img_folder) # creates all the sprites from the folder. used to make different tiles so it looks nicer
         self.wall_b = imageimport("wall_b_32.png", self.img_folder)
@@ -76,6 +78,12 @@ class Game(): # creates a class with a name
         # initializes the classes and creates a sprite
         self.high_score = 0
         
+        self.tile_list = ["B", "T", "R", "L", "E", "W", "M", "Z", "3", "4", "5", "6", "7", "8", "9", "0", "X", ",", "/", "<", ">",
+                          "!", "@", "#", "$"]
+        self.sprite_list = [self.wall_b, self.wall_t, self.wall_tr, self.wall_tl, self.wall_br, self.wall_bl, self.wall_lr, self.wall_bt,
+                            self.wall_be, self.wall_te, self.wall_tle, self.wall_tre, self.wall_ble, self.wall_bre, self.wall_le, self.wall_re,
+                            self.wall_full, self.wall_blc, self.wall_brc, self.wall_tlc, self.wall_trc, self.wall_td, self.wall_bd, self.wall_ld, self.wall_bd]
+
         for row, tiles, in enumerate(self.map.data): # goes through each element in the file and determines if something should be created
             for col, tile, in enumerate(tiles):
                 if tile == '1':
@@ -97,57 +105,9 @@ class Game(): # creates a class with a name
                 elif tile == "z":
                     BCollect(self, col, row)
                 #walls
-                elif tile == "B": # repition of the different wall types, really stupid and annoying
-                    Wall(self, col, row, " ", 1, self.wall_b)
-                elif tile == "T":
-                    Wall(self, col, row, " ", 1, self.wall_t)
-                elif tile == "R":
-                    Wall(self, col, row, " ", 1, self.wall_tr)
-                elif tile == "L":
-                    Wall(self, col, row, " ", 1, self.wall_tl)
-                elif tile == "E":
-                    Wall(self, col, row, " ", 1, self.wall_br)
-                elif tile == "W":
-                    Wall(self, col, row, " ", 1, self.wall_bl)
-                elif tile == "M":
-                    Wall(self, col, row, " ", 1, self.wall_lr)
-                elif tile == "Z":
-                    Wall(self, col, row, " ", 1, self.wall_bt)
-                elif tile == "3":
-                    Wall(self, col, row, " ", 1, self.wall_be)
-                elif tile == "4":
-                    Wall(self, col, row, " ", 1, self.wall_te)
-                elif tile == "5":
-                    Wall(self, col, row, " ", 1, self.wall_tle)
-                elif tile == "6":
-                    Wall(self, col, row, " ", 1, self.wall_tre)
-                elif tile == "7":
-                    Wall(self, col, row, " ", 1, self.wall_ble)
-                elif tile == "8":
-                    Wall(self, col, row, " ", 1, self.wall_bre)
-                elif tile == "9":
-                    Wall(self, col, row, " ", 1, self.wall_le)
-                elif tile == "0":
-                    Wall(self, col, row, " ", 1, self.wall_re)
-                elif tile == "X":
-                    Wall(self, col, row, " ", 1, self.wall_full)
-                elif tile == ",":
-                    Wall(self, col, row, " ", 1, self.wall_blc)
-                elif tile == "/":
-                    Wall(self, col, row, " ", 1, self.wall_brc)
-                elif tile == "<":
-                    Wall(self, col, row, " ", 1, self.wall_tlc)
-                elif tile == ">":
-                    Wall(self, col, row, " ", 1, self.wall_trc)
-                elif tile == "!":
-                    Wall(self, col, row, " ", 1, self.wall_td)
-                elif tile == "@":
-                    Wall(self, col, row, " ", 1, self.wall_bd)
-                elif tile == "#":
-                    Wall(self, col, row, " ", 1, self.wall_ld)
-                elif tile == "$":
-                    Wall(self, col, row, " ", 1, self.wall_rd)
-                
+                for i, v in enumerate(self.tile_list):
+                    if tile == v:
+                        Wall(self, col, row, " ", 1, self.sprite_list[i])
 
     def draw_text(self, surface, text, size, color, x, y): # draws text using imput, pygame method
         font_name = pg.font.match_font('montserrat')
@@ -174,6 +134,7 @@ class Game(): # creates a class with a name
     def draw(self):
         # draws the sprites
         self.screen.fill((255, 255, 255)) # fills screen color
+        self.screen.blit(self.bg_img, (0, 0))
         self.all_sprites.draw(self.screen)
         self.all_mobs.draw(self.screen)
         self.all_coins.draw(self.screen)
