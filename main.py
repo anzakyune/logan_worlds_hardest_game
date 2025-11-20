@@ -95,7 +95,7 @@ class Game(): # creates a class with a name
                 elif tile == 'p':
                     self.player = Player(self, col, row)
                 elif tile == 'm':
-                    Mob(self, col, row)
+                    Mob(self, col, row, "lr", 1)
                 elif tile == 'b':
                     Boost(self, col, row, 2)
                 elif tile == 's':

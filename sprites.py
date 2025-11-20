@@ -181,31 +181,42 @@ class Player(Sprite):
             self.image = self.game.player_img
 
 class Mob(Sprite):
-    def __init__(self, game, x, y):
+    def __init__(self, game, x, y, state, speedmod):
         self.game = game
         self.groups = game.all_sprites, game.all_mobs
         Sprite.__init__(self, self.groups)
         
         self.image = pg.Surface(TILESIZE)
         self.image = self.game.mob_img
+        self.state = state
         self.rect = self.image.get_rect()
         #self.rect.x = x * TILESIZE[0]
         #self.rect.y = y * TILESIZE[1]
         self.pos = vec(x*TILESIZE[0], y*TILESIZE[1])
         self.direction = False
-        self.speed = 250
-        self.vel = vec(choice([-1, 1]), choice([-1, 1]))
-        print(self.vel.x)
+        self.speed = 250*speedmod
+        self.dir = "right"
+        self.vel = vec(0, 0)
+
+    def motion(self):
+        if self.state == "default":
+            self.vel = vec(choice([-1, 1]), choice([-1, 1]))
+        elif self.state == "lr":
+            if self.dir == "right":
+                self.vel = vec(1, 0)
+            elif self.dir == "left":
+                self.vel = vec(-1, 0)
     def collide_with_walls(self, dir): # same as player class
         if dir == "x":
             hits = pg.sprite.spritecollide(self, self.game.all_walls, False)
             if hits:
                 if self.vel.x > 0:
                     self.pos.x = hits[0].rect.left - self.rect.width
+                    self.dir = "left"
                 if self.vel.x < 0:
                     self.pos.x = hits[0].rect.right
+                    self.dir = "right"
                 self.rect.x = self.pos.x
-                self.vel.x *= choice([-1, 1])
         if dir == "y":
             hits = pg.sprite.spritecollide(self, self.game.all_walls, False)
             if hits:
@@ -214,8 +225,8 @@ class Mob(Sprite):
                 if self.vel.y < 0:
                     self.pos.y = hits[0].rect.bottom 
                 self.rect.y = self.pos.y
-                self.vel.y *= choice([-1, 1])
     def update(self):
+        self.motion()
         self.pos += self.vel*(self.speed*self.game.dt)
         self.rect.x = self.pos.x
         self.collide_with_walls("x")
