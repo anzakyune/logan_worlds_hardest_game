@@ -24,10 +24,14 @@ def imageimport(eximage, img_folder): # creates a function to make the image imp
 class Game(): # creates a class with a name
     def __init__(self): # creates a method to initialize
         pg.init()
+        pg.mixer.init()
         self.clock = pg.time.Clock() # creates a timer used for many thingssssss
         self.screen = pg.display.set_mode((WIDTH, HEIGHT)) # creates screen
         pg.display.set_caption("declan's awesome game :D!!!!") #changes window title
         self.playing = True
+        
+    def get(self, image): # creates a function to make the image importing lines shorter, so it doesnt create a variable or lines
+        return pg.image.load(path.join(self.img_folder, image+"_32.png")).convert_alpha()
     
     def load_data(self): # gives the game class a map property to parse the text file - level1.txt
         self.game_folder = path.dirname(__file__)
@@ -40,33 +44,6 @@ class Game(): # creates a class with a name
         self.mob_img = pg.image.load(path.join(self.img_folder, "mob_32x32.png")).convert_alpha()
         self.bg_img = pg.image.load(path.join(self.img_folder, "background_32x24.png")).convert_alpha()
         self.bg_img = pg.transform.scale(self.bg_img, (WIDTH, HEIGHT))
-        # WALLS - brute force import
-        self.base_wall = imageimport("wall_base_32.png", self.img_folder) # creates all the sprites from the folder. used to make different tiles so it looks nicer
-        self.wall_b = imageimport("wall_b_32.png", self.img_folder)
-        self.wall_t = imageimport("wall_t_32.png", self.img_folder)
-        self.wall_bl = imageimport("wall_bl_32.png", self.img_folder)
-        self.wall_br = imageimport("wall_br_32.png", self.img_folder)
-        self.wall_tl = imageimport("wall_tl_32.png", self.img_folder)
-        self.wall_tr = imageimport("wall_tr_32.png", self.img_folder)
-        self.wall_lr = imageimport("wall_lr_32.png", self.img_folder)
-        self.wall_bt = imageimport("wall_bt_32.png", self.img_folder)
-        self.wall_be = imageimport("wall_be_32.png", self.img_folder)
-        self.wall_te = imageimport("wall_te_32.png", self.img_folder)
-        self.wall_tre = imageimport("wall_tre_32.png", self.img_folder)
-        self.wall_tle = imageimport("wall_tle_32.png", self.img_folder)
-        self.wall_bre = imageimport("wall_bre_32.png", self.img_folder)
-        self.wall_ble = imageimport("wall_ble_32.png", self.img_folder)
-        self.wall_le = imageimport("wall_le_32.png", self.img_folder)
-        self.wall_re = imageimport("wall_re_32.png", self.img_folder)
-        self.wall_full = imageimport("wall_full_32.png", self.img_folder)
-        self.wall_trc = imageimport("wall_blc_32.png", self.img_folder)
-        self.wall_tlc = imageimport("wall_brc_32.png", self.img_folder)
-        self.wall_blc = imageimport("wall_trc_32.png", self.img_folder)
-        self.wall_brc = imageimport("wall_tlc_32.png", self.img_folder)
-        self.wall_td = imageimport("wall_td_32.png", self.img_folder)
-        self.wall_rd = imageimport("wall_rd_32.png", self.img_folder)
-        self.wall_ld = imageimport("wall_ld_32.png", self.img_folder)
-        self.wall_bd = imageimport("wall_bd_32.png", self.img_folder)
 
     def new(self):
         self.load_data() # calls load data and creates maps
@@ -80,9 +57,9 @@ class Game(): # creates a class with a name
         
         self.tile_list = ["B", "T", "R", "L", "E", "W", "M", "Z", "3", "4", "5", "6", "7", "8", "9", "0", "X", ",", "/", "<", ">",
                           "!", "@", "#", "$"]
-        self.sprite_list = [self.wall_b, self.wall_t, self.wall_tr, self.wall_tl, self.wall_br, self.wall_bl, self.wall_lr, self.wall_bt,
-                            self.wall_be, self.wall_te, self.wall_tle, self.wall_tre, self.wall_ble, self.wall_bre, self.wall_le, self.wall_re,
-                            self.wall_full, self.wall_blc, self.wall_brc, self.wall_tlc, self.wall_trc, self.wall_td, self.wall_bd, self.wall_ld, self.wall_bd]
+        self.sprite_list = [self.get("wall_b"), self.get("wall_t"), self.get("wall_tr"), self.get("wall_tl"), self.get("wall_br"), self.get("wall_bl"), self.get("wall_lr"), self.get("wall_bt"),
+                            self.get("wall_be"), self.get("wall_te"), self.get("wall_tle"), self.get("wall_tre"), self.get("wall_ble"), self.get("wall_bre"), self.get("wall_le"), self.get("wall_re"),
+                            self.get("wall_full"), self.get("wall_blc"), self.get("wall_brc"), self.get("wall_tlc"), self.get("wall_trc"), self.get("wall_td"), self.get("wall_bd"), self.get("wall_ld"), self.get("wall_bd")]
 
         for row, tiles, in enumerate(self.map.data): # goes through each element in the file and determines if something should be created
             for col, tile, in enumerate(tiles):
