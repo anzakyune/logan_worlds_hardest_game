@@ -27,6 +27,7 @@ class Game(): # creates a class with a name
         self.screen = pg.display.set_mode((WIDTH, HEIGHT)) # creates screen
         pg.display.set_caption("declan's awesome game :D!!!!") #changes window title
         self.playing = True
+        self.running = True
         
     def get(self, image): # creates a function to make the image importing lines shorter, so it doesnt create a variable or lines - called get to minimize characters used
         return pg.image.load(path.join(self.img_folder, image+"_32.png")).convert_alpha()
@@ -42,6 +43,7 @@ class Game(): # creates a class with a name
         self.mob_img = pg.image.load(path.join(self.img_folder, "mob_32x32.png")).convert_alpha()
         self.bg_img = pg.image.load(path.join(self.img_folder, "background_32x24.png")).convert_alpha()
         self.bg_img = pg.transform.scale(self.bg_img, (WIDTH, HEIGHT))
+        self.base_wall = pg.image.load(path.join(self.img_folder, "wall_base_32.png")).convert_alpha()
 
     def new(self):
         self.load_data() # calls load data and creates maps
@@ -64,7 +66,7 @@ class Game(): # creates a class with a name
                 if tile == '1':
                     Wall(self, col, row, " ", 1, self.base_wall) # adds a normal wall
                 elif tile == '2':
-                    Wall(self, col, row, "breakable", 1, self.base_wall) # adds a breakable wall, different through state
+                    Wall(self, col, row, "end", 1, self.base_wall) # adds a breakable wall, different through state
                 elif tile == 'c':
                     Coin(self, col, row)
                 elif tile == 'p':
@@ -121,6 +123,24 @@ class Game(): # creates a class with a name
             pg.quit()
         if self.player.health > 0:
             pg.display.flip() # double buffering, graphics handler 
+    def wait_for_key(self):
+        waiting = True
+        while waiting:
+            self.clock.tick(FPS)
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    waiting = False
+                    self.running = False
+                if event.type == pg.KEYUP:
+                    waiting = False
+
+   # runs while waiting for a key to be pressed
+    def show_start_screen(self):
+        # game splash/start screen
+        self.screen.fill(BLACK)
+        self.draw_text(self.screen,"Hello there!", 48, WHITE, WIDTH / 2, HEIGHT / 4)
+        pg.display.flip()
+        self.wait_for_key()
     def run(self):
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000 # timer value used for control of speed based on fps, so with lag you dont lose speed
@@ -134,5 +154,7 @@ class Game(): # creates a class with a name
 
 if __name__ == "__main__":
     g = Game() # creating an instance for starting the Game class
-    g.new()
-    g.run()
+    g.show_start_screen()
+    while g.running:
+        g.new()
+        g.run()

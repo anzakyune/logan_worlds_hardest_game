@@ -162,7 +162,11 @@ class Player(Sprite):
         hits = pg.sprite.spritecollide(self, group, kill)
         if hits:
             self.speedmod = hits[0].speed
-
+    def end(self):
+        hits = pg.sprite.spritecollide(self, self.game.all_walls, False)
+        if hits:
+            if hits[0].state == "end":
+                print("touched end")
     def update(self):
         self.get_keys()
         # checks for collision with walls, and sets position to appropriate values
